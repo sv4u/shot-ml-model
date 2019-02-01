@@ -1,7 +1,7 @@
 CC=Rscript
-FILE=compile.R
+FILE=model.R
 
-render: compile.R
+render:
 	$(CC) $(FILE)
 
 update: update.sh
