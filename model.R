@@ -1,5 +1,8 @@
 rm(list = ls())
 
+this.dir <- dirname(parent.frame(2)$ofile)
+setwd(this.dir)
+
 set.seed(100)
 
 library(purrr)
