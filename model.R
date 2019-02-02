@@ -34,7 +34,7 @@ print("got regular season data")
 get.helpful.data = function(data) {
 	data.frame(x = data$xCordAdjusted,
 		   y = data$yCordAdjusted,
-		   goal = as.factor(data$goal))
+		   goal = data$goal)
 }
 
 analysis.2015 = get.helpful.data(season.2015)
@@ -57,15 +57,17 @@ control = trainControl(method = "repeatedcv", number = 5, repeats = 2)
 
 print("control is trained")
 
-model.knn = train(goal ~ ., data = analysis.all, method = "knn", trControl = control)
+model.knn = train(goal ~ .,
+				  data = analysis.all,
+				  method = "knn", trControl = control)
 
 print("model (knn) is trained")
 
 print(model.knn)
 print(model.knn$finalModel)
 
-new.x = seq(-200, 200, 1)
-new.y = seq(-85, 85, 1)
+new.x = seq(0, 200, 1)
+new.y = seq(0, 85, 1)
 
 testing.data = expand.grid(new.x, new.y)
 colnames(testing.data) = c("x", "y")
@@ -76,13 +78,19 @@ prediction.knn = predict(model.knn, newdata = testing.data)
 
 print("predictions (knn) are made")
 
-testing.knn.data$x = testing.data$x
-testing.knn.data$y = testing.data$y
-testing.knn.data$goal = prediction.knn
+testing.knn.data = data.frame(x = testing.data$x,
+							 y = testing.data$y,
+							 goal = prediction.knn)
 
 plot.knn = ggplot(testing.knn.data) +
-  geom_hex(aes(x = x, y = y, alpha = goal), fill = "#F44242", color = "#000000") +
-  labs(title = "Prediction from KNN Model", x = "X Position", y = "Y Position") +
+  geom_hex(aes(x = x,
+  			 y = y,
+  			 alpha = goal),
+  		 fill = "#F44242",
+  		 color = "#000000") +
+  labs(title = "Prediction from KNN Model",
+  	 x = "X Position",
+  	 y = "Y Position") +
   theme_minimal()
 
 print("knn model done")
@@ -98,11 +106,17 @@ prediction.nnet = predict(model.nnet, newdata = testing.data)
 
 print("predictions (nnet) made")
 
-testing.nnet.data$x = testing.data$x
-testing.nnet.data$y = testing.data$y
-testing.nnet.data$goal = prediction.nnet
+testing.nnet.data = data.frame(x = testing.data$x,
+							   y = testing.data$y,
+							   goal = prediction.nnet)
 
 plot.nnet = ggplot(testing.nnet.data) +
-  geom_hex(aes(x = x, y = y, alpha = goal), fill = "#F44242", color = "#000000") +
-  labs(title = "Prediction from Neural Net Model", x = "X Position", y = "Y Position") +
+  geom_hex(aes(x = x,
+  			 y = y,
+  			 alpha = goal),
+  		 fill = "#F44242",
+  		 color = "#000000") +
+  labs(title = "Prediction from Neural Net Model",
+  	 x = "X Position",
+  	 y = "Y Position") +
   theme_minimal()
