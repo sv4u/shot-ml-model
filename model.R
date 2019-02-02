@@ -57,6 +57,7 @@ control = trainControl(method = "repeatedcv", number = 5, repeats = 2)
 
 print("control is trained")
 
+# takes 15 minutes to train
 model.1 = train(goal ~ ., data = analysis.all, method = "knn", trControl = control)
 
 print("model is trained")
@@ -75,7 +76,3 @@ print("testing data is made")
 prediction = predict(model.1, newdata = testing.data)
 
 print("predictions are made")
-
-confusionMatrix(prediction, testing.data)
-
-print("i am confus")
