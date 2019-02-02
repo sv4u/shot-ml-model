@@ -59,7 +59,7 @@ print("control is trained")
 
 model.knn = train(goal ~ ., data = analysis.all, method = "knn", trControl = control)
 
-print("model is trained")
+print("model (knn) is trained")
 
 print(model.knn)
 print(model.knn$finalModel)
@@ -72,13 +72,15 @@ colnames(testing.data) = c("x", "y")
 
 print("testing data is made")
 
-prediction = predict(model.1, newdata = testing.data)
+prediction.knn = predict(model.knn, newdata = testing.data)
 
-print("predictions are made")
+print("predictions (knn) are made")
 
-testing.data$goal = prediction
+testing.knn.data$x = testing.data$x
+testing.knn.data$y = testing.data$y
+testing.knn.data$goal = prediction.knn
 
-plot.knn = ggplot(testing.data) +
+plot.knn = ggplot(testing.knn.data) +
   geom_hex(aes(x = x, y = y, alpha = goal), fill = "#F44242", color = "#000000") +
   labs(title = "Prediction from KNN Model", x = "X Position", y = "Y Position") +
   theme_minimal()
@@ -89,3 +91,18 @@ model.nnet = train(goal ~ .,
                    data = analysis.all,
                    method = "nnet",
                    trControl = control)
+
+print("model (nnet) trained")
+
+prediction.nnet = predict(model.nnet, newdata = testing.data)
+
+print("predictions (nnet) made")
+
+testing.nnet.data$x = testing.data$x
+testing.nnet.data$y = testing.data$y
+testing.nnet.data$goal = prediction.nnet
+
+plot.nnet = ggplot(testing.nnet.data) +
+  geom_hex(aes(x = x, y = y, alpha = goal), fill = "#F44242", color = "#000000") +
+  labs(title = "Prediction from Neural Net Model", x = "X Position", y = "Y Position") +
+  theme_minimal()
