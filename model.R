@@ -1,7 +1,7 @@
 rm(list = ls())
 
-# this.dir <- dirname(parent.frame(2)$ofile)
-# setwd(this.dir)
+this.dir <- dirname(parent.frame(2)$ofile)
+setwd(this.dir)
 
 set.seed(100)
 
@@ -57,13 +57,12 @@ control = trainControl(method = "repeatedcv", number = 5, repeats = 2)
 
 print("control is trained")
 
-# takes 15 minutes to train
-model.1 = train(goal ~ ., data = analysis.all, method = "knn", trControl = control)
+model.knn = train(goal ~ ., data = analysis.all, method = "knn", trControl = control)
 
 print("model is trained")
 
-print(model.1)
-print(model.1$finalModel)
+print(model.knn)
+print(model.knn$finalModel)
 
 new.x = seq(-200, 200, 1)
 new.y = seq(-85, 85, 1)
@@ -76,3 +75,17 @@ print("testing data is made")
 prediction = predict(model.1, newdata = testing.data)
 
 print("predictions are made")
+
+testing.data$goal = prediction
+
+plot.knn = ggplot(testing.data) +
+  geom_hex(aes(x = x, y = y, alpha = goal), fill = "#F44242", color = "#000000") +
+  labs(title = "Prediction from KNN Model", x = "X Position", y = "Y Position") +
+  theme_minimal()
+
+print("knn model done")
+
+model.nnet = train(goal ~ .,
+                   data = analysis.all,
+                   method = "nnet",
+                   trControl = control)
