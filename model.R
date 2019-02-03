@@ -61,15 +61,9 @@ control = trainControl(method = "repeatedcv", number = 5, repeats = 2)
 
 print("control is trained")
 
-model.knn = train(goal ~ .-goal,
-				  data = analysis.all,
-				  method = "knn", trControl = control)
-
-print("model (knn) is trained")
-
 model.nnet = train(goal ~ . -goal,
                    data = analysis.all,
-                   method = "nnet",
+                   method = "nnet,"
                    trControl = control)
 
 print("model (nnet) trained")
