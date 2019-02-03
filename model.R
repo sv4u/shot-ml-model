@@ -63,7 +63,9 @@ print("control is trained")
 
 model.nnet = train(goal ~ . -goal,
                    data = analysis.all,
-                   method = "nnet,"
+                   method = "nnet",
                    trControl = control)
 
 print("model (nnet) trained")
+
+current.prediction = predict(model.nnet, newdata = analysis.2018)
