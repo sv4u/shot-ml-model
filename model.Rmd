@@ -1,7 +1,27 @@
-rm(list = ls())
+---
+title: "NHL Shot based Goal Scoring Model"
+author: "Sasank Vishnubhatla"
+date: "February 2, 2019"
+output:
+  html_document:
+    runtime: shiny
+    theme: simplex
+    df_print: paged
+    dev: 'svg'
+---
 
-this.dir <- dirname(parent.frame(2)$ofile)
-setwd(this.dir)
+```{r global_options, include = FALSE}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+Last Update: `r Sys.Date()`
+
+# Libraries
+
+Before we start, let's load a few libraries.
+
+```{r libraries}
+rm(list = ls())
 
 set.seed(100)
 
@@ -10,18 +30,24 @@ library(caret)
 library(doParallel)
 
 registerDoParallel(cores = (detectCores() - 1))
+```
 
-print("parallel cores done")
-print("num cores:")
-print(detectCores() - 1)
+We register all but one core so we can have a lot of parallelsism when we start training our models.
 
+# Data Loading
+
+Let's read in our data.
+
+```{r read_csv}
 data.2015 = read.csv("data/2015.csv")
 data.2016 = read.csv("data/2016.csv")
 data.2017 = read.csv("data/2017.csv")
 data.2018 = read.csv("data/2018.csv")
+```
 
-print("read data")
+Now, we will only deal with regular season events. So let's remove the playoffs from our datasets.
 
+```{r remove_playoffs}
 get.regular.season = function(data) {
 	subset(data, isPlayoffGame == 0)
 }
@@ -30,9 +56,19 @@ season.2015 = get.regular.season(data.2015)
 season.2016 = get.regular.season(data.2016)
 season.2017 = get.regular.season(data.2017)
 season.2018 = get.regular.season(data.2018)
+```
 
-print("got regular season data")
+Now let's remove extraneous columns. At the end, we will have the following columns (I've changed their names for ease):
 
+| Old Column Name | New Column Name |
+| --------------- | --------------- |
+| `xCordAdjusted` | `x` |
+| `yCordAdjusted` | `y` |
+| `shotAngleAdjusted` | `angle` |
+| `shotDistance` | `dist` |
+| `goal` | `goal` |
+
+```{r get_helpful}
 get.helpful.data = function(data) {
 	data.frame(x = data$xCordAdjusted,
 		   y = data$yCordAdjusted,
@@ -45,31 +81,30 @@ analysis.2015 = get.helpful.data(season.2015)
 analysis.2016 = get.helpful.data(season.2016)
 analysis.2017 = get.helpful.data(season.2017)
 analysis.2018 = get.helpful.data(season.2018)
+```
 
-print("got helpful data")
+Sometimes, there is incomplete data. Let's just keep all the complete cases and remove the incomplete ones.
 
+```{r remove_incomplete}
 analysis.2015 = analysis.2015[complete.cases(analysis.2015),]
 analysis.2016 = analysis.2016[complete.cases(analysis.2016),]
 analysis.2017 = analysis.2017[complete.cases(analysis.2017),]
 analysis.all = rbind(analysis.2017, rbind(analysis.2016, analysis.2015))
 analysis.all = analysis.all[complete.cases(analysis.all),]
 analysis.2018 = analysis.2018[complete.cases(analysis.2018),]
+```
 
-print("got all complete cases")
+# Creating the Models
 
+With our data, we can start creating models. We'll be creating the following models:
+
+- Neural Network
+
+```{r train_models}
 control = trainControl(method = "repeatedcv", number = 5, repeats = 2)
-
-print("control is trained")
-
-model.knn = train(goal ~ .-goal,
-				  data = analysis.all,
-				  method = "knn", trControl = control)
-
-print("model (knn) is trained")
 
 model.nnet = train(goal ~ . -goal,
                    data = analysis.all,
                    method = "nnet",
                    trControl = control)
-
-print("model (nnet) trained")
+```
