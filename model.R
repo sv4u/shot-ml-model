@@ -1,7 +1,7 @@
 rm(list = ls())
 
-this.dir <- dirname(parent.frame(2)$ofile)
-setwd(this.dir)
+# this.dir <- dirname(parent.frame(2)$ofile)
+# setwd(this.dir)
 
 set.seed(100)
 
@@ -69,3 +69,15 @@ model.nnet = train(goal ~ . -goal,
 print("model (nnet) trained")
 
 current.prediction = predict(model.nnet, newdata = analysis.2018)
+
+print("predictions from model (nnet) on 2018 data")
+
+prediction.data = current.prediction
+prediction.data$predict = 1/current.prediction
+
+plot.nnet = ggplot(prediction.data) +
+	geom_hex(aes(x = x, y = y, alpha = predict), fill = "#41A6F4", color = "#FFFFFF") +
+	labs(title = "Predicted Cold Zones", x = "X Position", y = "Y Position") +
+	theme_minimal()
+
+plot.nnet
