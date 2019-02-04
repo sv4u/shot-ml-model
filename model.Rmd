@@ -132,7 +132,7 @@ model.knn = train(goal ~ . -goal -team,
 Our predictions will come from `analysis.2018`. Here's what a little bit of that data looks like:
 
 ```{r testing_data}
-kable(analysis.2018[1:25,], caption = "Regular Season Shot Data from the 2018-2019 Season")
+analysis.2018
 ```
 
 Now, we can use the `predict` function to get our predictions.
@@ -151,13 +151,13 @@ knn.prediction.data$predict = knn.prediction
 So, our Neural Network data looks like:
 
 ```{r nnet_data}
-kable(nnet.prediction.data[1:25,], caption = "Neural Network Prediction Data")
+nnet.prediction.data
 ```
 
 Our K-Nearest Neighbors data looks like:
 
 ```{r knn_data}
-kable(knn.prediction.data[1:25,], caption = "K-Nearest Neighbors Data")
+knn.prediction.data
 ```
 
 # Visualizing the Predictions
@@ -282,4 +282,176 @@ Here is the K nearest neighbors plot:
 
 ```{r bos_vis_knn}
 bos.plot.knn
+```
+
+## Tampa Bay Lightening
+
+Let's first get their data.
+
+```{r tbl_data}
+tbl.nnet = get.team.data(nnet.prediction.data, "T.B")
+tbl.knn = get.team.data(knn.prediction.data, "T.B")
+```
+
+Now, let's see how the Lightning fared in our models.
+
+```{r tbl_visuals}
+tbl.plot.nnet = ggplot(tbl.nnet) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "#002868",
+			 color = "#FFFFFF") +
+	labs(title = "Tampa Bay Predicted Goal Probability from NNet Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+
+tbl.plot.knn = ggplot(tbl.knn) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "#002868",
+			 color = "#FFFFFF") +
+	labs(title = "Tampa Bay Predicted Goal Probability from KNN Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+```
+
+Here is the neural network plot:
+
+```{r tbl_vis_net}
+tbl.plot.nnet
+```
+
+Here is the K nearest neighbors plot:
+
+```{r tbl_vis_knn}
+tbl.plot.knn
+```
+
+## San Jose Sharks
+
+Let's first get their data.
+
+```{r sjs_data}
+sjs.nnet = get.team.data(nnet.prediction.data, "S.J")
+sjs.knn = get.team.data(knn.prediction.data, "S.J")
+```
+
+Now, let's see how the Sharks fared in our models.
+
+```{r sjs_visuals}
+sjs.plot.nnet = ggplot(sjs.nnet) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "#006D75",
+			 color = "#EA7200") +
+	labs(title = "San Jose Predicted Goal Probability from NNet Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+
+sjs.plot.knn = ggplot(sjs.knn) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "#006D75",
+			 color = "#EA7200") +
+	labs(title = "San Jose Predicted Goal Probability from KNN Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+```
+
+Here is the neural network plot:
+
+```{r sjs_vis_net}
+sjs.plot.nnet
+```
+
+Here is the K nearest neighbors plot:
+
+```{r sjs_vis_knn}
+sjs.plot.knn
+```
+
+## Nashville Predators
+
+Let's first get their data.
+
+```{r nsh_data}
+nsh.nnet = get.team.data(nnet.prediction.data, "NSH")
+nsh.knn = get.team.data(knn.prediction.data, "NSH")
+```
+
+Now, let's see how the Predators fared in our models.
+
+```{r nsh_visuals}
+nsh.plot.nnet = ggplot(nsh.nnet) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "#FFB81C",
+			 color = "#041E42") +
+	labs(title = "Nashville Predicted Goal Probability from NNet Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+
+nsh.plot.knn = ggplot(nsh.knn) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "#FFB81C",
+			 color = "#041E42") +
+	labs(title = "Nashville Predicted Goal Probability from KNN Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+```
+
+Here is the neural network plot:
+
+```{r nsh_vis_net}
+nsh.plot.nnet
+```
+
+Here is the K nearest neighbors plot:
+
+```{r nsh_vis_knn}
+nsh.plot.knn
+```
+
+## Los Angeles Kings
+
+Let's first get their data.
+
+```{r lak_data}
+lak.nnet = get.team.data(nnet.prediction.data, "L.A")
+lak.knn = get.team.data(knn.prediction.data, "L.A")
+```
+
+Now, let's see how the Kings fared in our models.
+
+```{r lak_visuals}
+lak.plot.nnet = ggplot(lak.nnet) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "#111111",
+			 color = "#A2AAAD") +
+	labs(title = "Los Angeles Predicted Goal Probability from NNet Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+
+lak.plot.knn = ggplot(lak.knn) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "#111111",
+			 color = "#A2AAAD") +
+	labs(title = "Los Angeles Predicted Goal Probability from KNN Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+```
+
+Here is the neural network plot:
+
+```{r lak_vis_net}
+lak.plot.nnet
+```
+
+Here is the K nearest neighbors plot:
+
+```{r lak_vis_knn}
+lak.plot.knn
 ```
