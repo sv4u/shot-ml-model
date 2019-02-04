@@ -123,7 +123,7 @@ model.knn = train(goal ~ . -goal,
 Our predictions will come from `analysis.2018`. Here's what a little bit of that data looks like:
 
 ```{r testing_data}
-kable(analysis.2018[1:10,], caption = "Regular Season Shot Data from the 2018-2019 Season")
+kable(analysis.2018[1:25,], caption = "Regular Season Shot Data from the 2018-2019 Season")
 ```
 
 Now, we can use the `predict` function to get our predictions.
@@ -139,6 +139,18 @@ knn.prediction.data = data.frame(analysis.2018)
 knn.prediction.data$predict = knn.prediction
 ```
 
+So, our Neural Network data looks like:
+
+```{r nnet_data}
+kable(nnet.prediction.data[1:25,], caption = "Neural Network Prediction Data")
+```
+
+Our K-Nearest Neighbors data looks like:
+
+```{r knn_data}
+kable(knn.prediction.data[1:25,], caption = "K-Nearest Neighbors Data")
+```
+
 # Visualizing the Predictions
 
 With our predictions, let's view how they differ.
@@ -146,7 +158,7 @@ With our predictions, let's view how they differ.
 ```{r visuals}
 plot.nnet = ggplot(nnet.prediction.data) +
 	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
-			 fill = "red",
+			 fill = "orange",
 			 color = "grey") +
 	labs(title = "Predicted Goal Probability from Neural Network Model",
 		 x = "Distance from Net",
@@ -155,7 +167,7 @@ plot.nnet = ggplot(nnet.prediction.data) +
 
 plot.knn = ggplot(knn.prediction.data) +
 	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
-			 fill = "red",
+			 fill = "orange",
 			 color = "grey") +
 	labs(title = "Predicted Goal Probability from K-Nearest Neighbors Model",
 		 x = "Distance from Net",
