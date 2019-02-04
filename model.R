@@ -1,7 +1,7 @@
 rm(list = ls())
 
-# this.dir <- dirname(parent.frame(2)$ofile)
-# setwd(this.dir)
+this.dir <- dirname(parent.frame(2)$ofile)
+setwd(this.dir)
 
 set.seed(100)
 
@@ -72,7 +72,7 @@ current.prediction = predict(model.nnet, newdata = analysis.2018)
 
 print("predictions from model (nnet) on 2018 data")
 
-prediction.data = current.prediction
+prediction.data = data.frame(analysis.2018)
 prediction.data$predict = 1/current.prediction
 
 plot.nnet = ggplot(prediction.data) +
