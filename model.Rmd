@@ -284,7 +284,7 @@ Here is the K nearest neighbors plot:
 bos.plot.knn
 ```
 
-## Tampa Bay Lightening
+## Tampa Bay Lightning
 
 Let's first get their data.
 
