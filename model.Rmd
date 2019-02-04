@@ -14,7 +14,7 @@ output:
 knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 ```
 
-Last Update: `r Sys.Date()`
+Last Update: `r Sys.time()`
 
 # Libraries
 
@@ -24,6 +24,8 @@ Before we start, let's load a few libraries.
 rm(list = ls())
 
 set.seed(100)
+
+options(warn = -1)
 
 library(knitr)
 library(ggplot2)
