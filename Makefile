@@ -1,12 +1,16 @@
 CC=Rscript
-FILE=model.R
+REND=model.Rmd
+COMP=model.R
+
+compile:
+	$(CC) $(COMP)
 
 render:
-	$(CC) $(FILE)
+	$(CC) $(REND)
 
 update: update.sh
 	./update.sh
 
-default: render
+default: compile
 
 all: render update
