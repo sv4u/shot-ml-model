@@ -77,6 +77,7 @@ get.helpful.data = function(data) {
 		   y = data$yCordAdjusted,
 		   angle = data$shotAngleAdjusted,
 		   dist = data$shotDistance,
+		   team = data$teamCode,
 		   goal = data$goal)
 }
 
@@ -107,12 +108,12 @@ With our data, we can start creating models. We'll be creating the following mod
 ```{r train_models}
 control = trainControl(method = "repeatedcv", number = 5, repeats = 2)
 
-model.nnet = train(goal ~ . -goal,
+model.nnet = train(goal ~ . -goal -team,
                    data = analysis.all,
                    method = "nnet",
                    trControl = control)
 
-model.knn = train(goal ~ . -goal,
+model.knn = train(goal ~ . -goal -team,
 				  data = analysis.all,
 				  method = "knn",
 				  trControl = control)
@@ -185,4 +186,57 @@ Here is our knn model:
 
 ```{r vis_knn}
 plot.knn
+```
+
+# Analysis {.tabset .tabset-fade}
+
+We'll need a function to get team data.
+
+```{r get_team_data}
+get.team.data = function(data, code) {
+	subset(data, team == code)
+}
+```
+
+## Pittsburgh Penguins
+
+Let's first get their data.
+
+```{r pit_data}
+pit.nnet = get.team.data(nnet.prediction.data, "PIT")
+pit.knn = get.team.data(knn.prediction.data, "PIT")
+```
+
+Now, let's see how the Penguins fared in our models.
+
+```{r pit_visuals}
+pit.plot.nnet = ggplot(pit.nnet) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "#000000",
+			 color = "#FCB514") +
+	labs(title = "Pittsburgh Predicted Goal Probability from NNet Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+
+pit.plot.knn = ggplot(pit.knn) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "#000000",
+			 color = "#FCB514") +
+	labs(title = "Pittsburgh Predicted Goal Probability from KNN Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+```
+
+Here is the neural network plot:
+
+```{r pit_vis_net}
+pit.plot.nnet
+```
+
+Here is the K nearest neighbors plot:
+
+```{r pit_vis_knn}
+pit.plot.knn
 ```
