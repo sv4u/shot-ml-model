@@ -98,6 +98,14 @@ analysis.all = analysis.all[complete.cases(analysis.all),]
 analysis.2018 = analysis.2018[complete.cases(analysis.2018),]
 ```
 
+We'll need a function to get team data.
+
+```{r get_team_data}
+get.team.data = function(data, code) {
+	subset(data, team == code)
+}
+```
+
 # Creating the Models
 
 With our data, we can start creating models. We'll be creating the following models:
@@ -190,14 +198,6 @@ plot.knn
 
 # Analysis {.tabset .tabset-fade}
 
-We'll need a function to get team data.
-
-```{r get_team_data}
-get.team.data = function(data, code) {
-	subset(data, team == code)
-}
-```
-
 ## Pittsburgh Penguins
 
 Let's first get their data.
@@ -239,4 +239,47 @@ Here is the K nearest neighbors plot:
 
 ```{r pit_vis_knn}
 pit.plot.knn
+```
+
+## Boston Bruins
+
+Let's first get their data.
+
+```{r bos_data}
+bos.nnet = get.team.data(nnet.prediction.data, "BOS")
+bos.knn = get.team.data(knn.prediction.data, "BOS")
+```
+
+Now, let's see how the Bruins fared in our models.
+
+```{r bos_visuals}
+bos.plot.nnet = ggplot(bos.nnet) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "#FFB81C",
+			 color = "#000000") +
+	labs(title = "Boston Predicted Goal Probability from NNet Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+
+bos.plot.knn = ggplot(bos.knn) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "#FFB81C",
+			 color = "#000000") +
+	labs(title = "Boston Predicted Goal Probability from KNN Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+```
+
+Here is the neural network plot:
+
+```{r bos_vis_net}
+bos.plot.nnet
+```
+
+Here is the K nearest neighbors plot:
+
+```{r bos_vis_knn}
+bos.plot.knn
 ```
