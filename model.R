@@ -34,11 +34,13 @@ season.2018 = get.regular.season(data.2018)
 print("got regular season data")
 
 get.helpful.data = function(data) {
-	data.frame(x = data$xCordAdjusted,
-		   y = data$yCordAdjusted,
-		   angle = data$shotAngleAdjusted,
-		   dist = data$shotDistance,
-		   goal = data$goal)
+	data.frame(
+		x = data$xCordAdjusted,
+		y = data$yCordAdjusted,
+		angle = data$shotAngleAdjusted,
+		dist = data$shotDistance,
+		goal = data$goal
+	)
 }
 
 analysis.2015 = get.helpful.data(season.2015)
@@ -48,36 +50,60 @@ analysis.2018 = get.helpful.data(season.2018)
 
 print("got helpful data")
 
-analysis.2015 = analysis.2015[complete.cases(analysis.2015),]
-analysis.2016 = analysis.2016[complete.cases(analysis.2016),]
-analysis.2017 = analysis.2017[complete.cases(analysis.2017),]
+analysis.2015 = analysis.2015[complete.cases(analysis.2015), ]
+analysis.2016 = analysis.2016[complete.cases(analysis.2016), ]
+analysis.2017 = analysis.2017[complete.cases(analysis.2017), ]
 analysis.all = rbind(analysis.2017, rbind(analysis.2016, analysis.2015))
-analysis.all = analysis.all[complete.cases(analysis.all),]
-analysis.2018 = analysis.2018[complete.cases(analysis.2018),]
+analysis.all = analysis.all[complete.cases(analysis.all), ]
+analysis.2018 = analysis.2018[complete.cases(analysis.2018), ]
 
 print("got all complete cases")
 
-control = trainControl(method = "repeatedcv", number = 5, repeats = 2)
+control = trainControl(method = "repeatedcv",
+					   number = 5,
+					   repeats = 2)
 
 print("control is trained")
 
 model.nnet = train(goal ~ . -goal,
-                   data = analysis.all,
-                   method = "nnet",
-                   trControl = control)
+				   data = analysis.all,
+				   method = "nnet",
+				   trControl = control)
 
 print("model (nnet) trained")
 
-current.prediction = predict(model.nnet, newdata = analysis.2018)
+model.knn = train(goal ~ . -goal,
+				  data = analysis.all,
+				  method = "knn",
+				  trControl = control)
 
-print("predictions from model (nnet) on 2018 data")
+print("model (knn) trained")
 
-prediction.data = data.frame(analysis.2018)
-prediction.data$predict = 1/current.prediction
+nnet.prediction = predict(model.nnet, newdata = analysis.2018)
+knn.prediction = predict(model.knn, newdata = analysis.2018)
 
-plot.nnet = ggplot(prediction.data) +
-	geom_hex(aes(x = x, y = y, alpha = predict), fill = "#41A6F4", color = "#FFFFFF") +
-	labs(title = "Predicted Cold Zones", x = "X Position", y = "Y Position") +
+print("predictions from model (nnet, knn) on 2018 data")
+
+nnet.prediction.data = data.frame(analysis.2018)
+nnet.prediction.data$predict = nnet.prediction
+
+knn.prediction.data = data.frame(analysis.2018)
+knn.prediction.data$predict = knn.prediction
+
+plot.nnet = ggplot(nnet.prediction.data) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "red",
+			 color = "grey") +
+	labs(title = "Predicted Goal Probability from Neural Network Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
 	theme_minimal()
 
-plot.nnet
+plot.knn = ggplot(knn.prediction.data) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "red",
+			 color = "grey") +
+	labs(title = "Predicted Goal Probability from K-Nearest Neighbors Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
