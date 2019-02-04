@@ -1,5 +1,5 @@
 CC=Rscript
-REND=model.Rmd
+REND=compile.R
 COMP=model.R
 
 compile:

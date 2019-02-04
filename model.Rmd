@@ -25,6 +25,7 @@ rm(list = ls())
 
 set.seed(100)
 
+library(knitr)
 library(ggplot2)
 library(caret)
 library(doParallel)
@@ -99,6 +100,7 @@ analysis.2018 = analysis.2018[complete.cases(analysis.2018),]
 With our data, we can start creating models. We'll be creating the following models:
 
 - Neural Network
+- K Nearest Neighbors
 
 ```{r train_models}
 control = trainControl(method = "repeatedcv", number = 5, repeats = 2)
@@ -107,4 +109,66 @@ model.nnet = train(goal ~ . -goal,
                    data = analysis.all,
                    method = "nnet",
                    trControl = control)
+
+model.knn = train(goal ~ . -goal,
+				  data = analysis.all,
+				  method = "knn",
+				  trControl = control)
+```
+
+# Extracting Predictions
+
+Our predictions will come from `analysis.2018`. Here's what a little bit of that data looks like:
+
+```{r testing_data}
+kable(analysis.2018[1:10,], caption = "Regular Season Shot Data from the 2018-2019 Season")
+```
+
+Now, we can use the `predict` function to get our predictions.
+
+```{r get_predictions}
+nnet.prediction = predict(model.nnet, newdata = analysis.2018)
+knn.prediction = predict(model.knn, newdata = analysis.2018)
+
+nnet.prediction.data = data.frame(analysis.2018)
+nnet.prediction.data$predict = nnet.prediction
+
+knn.prediction.data = data.frame(analysis.2018)
+knn.prediction.data$predict = knn.prediction
+```
+
+# Visualizing the Predictions
+
+With our predictions, let's view how they differ.
+
+```{r visuals}
+plot.nnet = ggplot(nnet.prediction.data) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "red",
+			 color = "grey") +
+	labs(title = "Predicted Goal Probability from Neural Network Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+
+plot.knn = ggplot(knn.prediction.data) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = "red",
+			 color = "grey") +
+	labs(title = "Predicted Goal Probability from K-Nearest Neighbors Model",
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+```
+
+Here is our neural net model:
+
+```{r vis_nnet}
+plot.nnet
+```
+
+Here is our knn model:
+
+```{r vis_knn}
+plot.knn
 ```
