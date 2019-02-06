@@ -162,41 +162,7 @@ knn.prediction.data
 
 # Visualizing the Predictions
 
-With our predictions, let's view how they differ.
-
-```{r visuals}
-plot.nnet = ggplot(nnet.prediction.data) +
-	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
-			 fill = "orange",
-			 color = "grey") +
-	labs(title = "Predicted Goal Probability from Neural Network Model",
-		 x = "Distance from Net",
-		 y = "Probability of Scoring") +
-	theme_minimal()
-
-plot.knn = ggplot(knn.prediction.data) +
-	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
-			 fill = "orange",
-			 color = "grey") +
-	labs(title = "Predicted Goal Probability from K-Nearest Neighbors Model",
-		 x = "Distance from Net",
-		 y = "Probability of Scoring") +
-	theme_minimal()
-```
-
-Here is our neural net model:
-
-```{r vis_nnet}
-plot.nnet
-```
-
-Here is our knn model:
-
-```{r vis_knn}
-plot.knn
-```
-
-To make our lives easier, here's a few plotting functions.
+With our predictions, let's view how they differ. To make our lives easier, here's a few plotting functions.
 
 ```{r vis_funs}
 make.knn.plot.dist = function(data, primary, secondary, team) {
@@ -252,6 +218,46 @@ make.nnet.plot.angle = function(data, primary, secondary, team) {
 }
 ```
 
+```{r visuals}
+plot.nnet.dist = make.nnet.plot.dist(nnet.prediction.data,
+									 "orange",
+									 "black",
+									 "NHL")
+plot.nnet.angle = make.nnet.plot.angle(nnet.prediction.data,
+									   "orange",
+									   "black",
+									   "NHL")
+
+plot.knn.dist = make.knn.plot.dist(knn.prediction.data,
+								   "orange",
+								   "black",
+								   "NHL")
+plot.knn.angle = make.knn.plot.angle(knn.prediction.data,
+									 "orange",
+									 "black",
+									 "NHL")
+```
+
+Here is our neural net model:
+
+```{r vis_nnet_dist}
+plot.nnet.dist
+```
+
+```{r vis_nnet_angle}
+plot.nnet.angle
+```
+
+Here is our knn model:
+
+```{r vis_knn_dist}
+plot.knn.dist
+```
+
+```{r vis_knn_angle}
+plot.knn.angle
+```
+
 # Analysis {.tabset .tabset-fade}
 
 ## Pittsburgh Penguins
@@ -266,35 +272,43 @@ pit.knn = get.team.data(knn.prediction.data, "PIT")
 Now, let's see how the Penguins fared in our models.
 
 ```{r pit_visuals}
-pit.plot.nnet = ggplot(pit.nnet) +
-	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
-			 fill = "#000000",
-			 color = "#FCB514") +
-	labs(title = "Pittsburgh Predicted Goal Probability from NNet Model",
-		 x = "Distance from Net",
-		 y = "Probability of Scoring") +
-	theme_minimal()
+pit.plot.nnet.dist = make.nnet.plot.dist(pit.nnet,
+										 "#000000",
+										 "#FCB514",
+										 "Pittsburgh")
+pit.plot.nnet.angle = make.nnet.plot.angle(pit.nnet,
+										   "#000000",
+										   "#FCB514",
+										   "Pittsburgh")
 
-pit.plot.knn = ggplot(pit.knn) +
-	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
-			 fill = "#000000",
-			 color = "#FCB514") +
-	labs(title = "Pittsburgh Predicted Goal Probability from KNN Model",
-		 x = "Distance from Net",
-		 y = "Probability of Scoring") +
-	theme_minimal()
+pit.plot.knn.dist = make.knn.plot.dist(pit.knn,
+									   "#000000",
+									   "#FCB514",
+									   "Pittsburgh")
+pit.plot.knn.angle = make.knn.plot.angle(pit.knn,
+										 "#000000",
+										 "#FCB514",
+										 "Pittsburgh")
 ```
 
-Here is the neural network plot:
+Here is the neural network plots:
 
-```{r pit_vis_net}
-pit.plot.nnet
+```{r pit_vis_net_dist}
+pit.plot.nnet.dist
 ```
 
-Here is the K nearest neighbors plot:
+```{r pit_vis_net_angle}
+pit.plot.nnet.angle
+```
 
-```{r pit_vis_knn}
-pit.plot.knn
+Here is the K nearest neighbors plots:
+
+```{r pit_vis_knn_dist}
+pit.plot.knn.dist
+```
+
+```{r pit_vis_knn_angle}
+pit.plot.knn.angle
 ```
 
 ## Boston Bruins
