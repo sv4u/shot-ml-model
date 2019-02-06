@@ -427,35 +427,43 @@ sjs.knn = get.team.data(knn.prediction.data, "S.J")
 Now, let's see how the Sharks fared in our models.
 
 ```{r sjs_visuals}
-sjs.plot.nnet = ggplot(sjs.nnet) +
-	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
-			 fill = "#006D75",
-			 color = "#EA7200") +
-	labs(title = "San Jose Predicted Goal Probability from NNet Model",
-		 x = "Distance from Net",
-		 y = "Probability of Scoring") +
-	theme_minimal()
+sjs.plot.nnet.dist = make.nnet.plot.dist(sjs.nnet,
+										 "#006D75",
+										 "#EA7200",
+										 "San Jose")
+sjs.plot.nnet.angle = make.nnet.plot.angle(sjs.nnet,
+										   "#006D75",
+										   "#EA7200",
+										   "San Jose")
 
-sjs.plot.knn = ggplot(sjs.knn) +
-	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
-			 fill = "#006D75",
-			 color = "#EA7200") +
-	labs(title = "San Jose Predicted Goal Probability from KNN Model",
-		 x = "Distance from Net",
-		 y = "Probability of Scoring") +
-	theme_minimal()
+sjs.plot.knn.dist = make.knn.plot.dist(sjs.knn,
+									   "#006D75",
+									   "#EA7200",
+									   "San Jose")
+sjs.plot.knn.angle = make.knn.plot.angle(sjs.knn,
+										 "#006D75",
+										 "#EA7200",
+										 "San Jose")
 ```
 
-Here is the neural network plot:
+Here is the neural network plots:
 
-```{r sjs_vis_net}
-sjs.plot.nnet
+```{r sjs_vis_net_dist}
+sjs.plot.nnet.dist
 ```
 
-Here is the K nearest neighbors plot:
+```{r sjs_vis_net_angle}
+sjs.plot.nnet.angle
+```
 
-```{r sjs_vis_knn}
-sjs.plot.knn
+Here is the K nearest neighbors plots:
+
+```{r sjs_vis_knn_dist}
+sjs.plot.knn.dist
+```
+
+```{r sjs_vis_knn_angle}
+sjs.plot.knn.angle
 ```
 
 ## Nashville Predators
