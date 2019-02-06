@@ -478,35 +478,43 @@ nsh.knn = get.team.data(knn.prediction.data, "NSH")
 Now, let's see how the Predators fared in our models.
 
 ```{r nsh_visuals}
-nsh.plot.nnet = ggplot(nsh.nnet) +
-	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
-			 fill = "#FFB81C",
-			 color = "#041E42") +
-	labs(title = "Nashville Predicted Goal Probability from NNet Model",
-		 x = "Distance from Net",
-		 y = "Probability of Scoring") +
-	theme_minimal()
+nsh.plot.nnet.dist = make.nnet.plot.dist(nsh.nnet,
+										 "#FFB81C",
+										 "#041E42",
+										 "Nashville")
+nsh.plot.nnet.angle = make.nnet.plot.angle(nsh.nnet,
+										   "#FFB81C",
+										   "#041E42",
+										   "Nashville")
 
-nsh.plot.knn = ggplot(nsh.knn) +
-	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
-			 fill = "#FFB81C",
-			 color = "#041E42") +
-	labs(title = "Nashville Predicted Goal Probability from KNN Model",
-		 x = "Distance from Net",
-		 y = "Probability of Scoring") +
-	theme_minimal()
+nsh.plot.knn.dist = make.knn.plot.dist(nsh.knn,
+									   "#FFB81C",
+									   "#041E42",
+									   "Nashville")
+nsh.plot.knn.angle = make.knn.plot.angle(nsh.knn,
+										 "#FFB81C",
+										 "#041E42",
+										 "Nashville")
 ```
 
-Here is the neural network plot:
+Here is the neural network plots:
 
-```{r nsh_vis_net}
-nsh.plot.nnet
+```{r nsh_vis_net_dist}
+nsh.plot.nnet.dist
 ```
 
-Here is the K nearest neighbors plot:
+```{r nsh_vis_net_angle}
+nsh.plot.nnet.angle
+```
 
-```{r nsh_vis_knn}
-nsh.plot.knn
+Here is the K nearest neighbors plots:
+
+```{r nsh_vis_knn_dist}
+nsh.plot.knn.dist
+```
+
+```{r nsh_vis_knn_angle}
+nsh.plot.knn.angle
 ```
 
 ## Los Angeles Kings
@@ -521,33 +529,41 @@ lak.knn = get.team.data(knn.prediction.data, "L.A")
 Now, let's see how the Kings fared in our models.
 
 ```{r lak_visuals}
-lak.plot.nnet = ggplot(lak.nnet) +
-	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
-			 fill = "#111111",
-			 color = "#A2AAAD") +
-	labs(title = "Los Angeles Predicted Goal Probability from NNet Model",
-		 x = "Distance from Net",
-		 y = "Probability of Scoring") +
-	theme_minimal()
+lak.plot.nnet.dist = make.nnet.plot.dist(lak.nnet,
+										 "#111111",
+										 "#A2AAAD",
+										 "Los Angeles")
+lak.plot.nnet.angle = make.nnet.plot.angle(lak.nnet,
+										   "#111111",
+										   "#A2AAAD",
+										   "Los Angeles")
 
-lak.plot.knn = ggplot(lak.knn) +
-	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
-			 fill = "#111111",
-			 color = "#A2AAAD") +
-	labs(title = "Los Angeles Predicted Goal Probability from KNN Model",
-		 x = "Distance from Net",
-		 y = "Probability of Scoring") +
-	theme_minimal()
+lak.plot.knn.dist = make.knn.plot.dist(lak.knn,
+									   "#111111",
+									   "#A2AAAD",
+									   "Los Angeles")
+lak.plot.knn.angle = make.knn.plot.angle(lak.knn,
+										 "#111111",
+										 "#A2AAAD",
+										 "Los Angeles")
 ```
 
-Here is the neural network plot:
+Here is the neural network plots:
 
-```{r lak_vis_net}
-lak.plot.nnet
+```{r lak_vis_net_dist}
+lak.plot.nnet.dist
 ```
 
-Here is the K nearest neighbors plot:
+```{r lak_vis_net_angle}
+lak.plot.nnet.angle
+```
 
-```{r lak_vis_knn}
-lak.plot.knn
+Here is the K nearest neighbors plots:
+
+```{r lak_vis_knn_dist}
+lak.plot.knn.dist
+```
+
+```{r lak_vis_knn_angle}
+lak.plot.knn.angle
 ```
