@@ -196,6 +196,62 @@ Here is our knn model:
 plot.knn
 ```
 
+To make our lives easier, here's a few plotting functions.
+
+```{r vis_funs}
+make.knn.plot.dist = function(data, primary, secondary, team) {
+	name = paste(team, "Predicted Goal Probability from KNN Model", sep = " ")
+	plot = ggplot(data) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = primary,
+			 color = secondary) +
+	labs(title = name,
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+	plot
+}
+
+make.knn.plot.angle = function(data, primary, secondary, team) {
+	name = paste(team, "Predicted Goal Probability from KNN Model", sep = " ")
+	plot = ggplot(data) +
+	geom_hex(aes(x = angle, y = predict, alpha = ..count..),
+			 fill = primary,
+			 color = secondary) +
+	labs(title = name,
+		 x = "Angle of Shot on Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+	plot
+}
+
+make.nnet.plot.dist = function(data, primary, secondary, team) {
+	name = paste(team, "Predicted Goal Probability from NNet Model", sep = " ")
+	plot = ggplot(data) +
+	geom_hex(aes(x = dist, y = predict, alpha = ..count..),
+			 fill = primary,
+			 color = secondary) +
+	labs(title = name,
+		 x = "Distance from Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+	plot
+}
+
+make.nnet.plot.angle = function(data, primary, secondary, team) {
+	name = paste(team, "Predicted Goal Probability from NNet Model", sep = " ")
+	plot = ggplot(data) +
+	geom_hex(aes(x = angle, y = predict, alpha = ..count..),
+			 fill = primary,
+			 color = secondary) +
+	labs(title = name,
+		 x = "Angle of Shot on Net",
+		 y = "Probability of Scoring") +
+	theme_minimal()
+	plot
+}
+```
+
 # Analysis {.tabset .tabset-fade}
 
 ## Pittsburgh Penguins
